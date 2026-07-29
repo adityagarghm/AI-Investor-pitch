@@ -5,7 +5,7 @@
 </head>
 <body>
     <main class="container">
-        <h1>🦈 AI Shark Tank Simulator</h1>
+        <h1>AI Shark Tank Simulator</h1>
         <p><em>Work in Progress Draft</em></p>
         <section>
             <h2>Submit Your Pitch</h2>
@@ -30,26 +30,29 @@
             </form>
         </section>
 
+        {% if submitted %}
+            <article style="background-color: #d4edda; color: #155724; padding: 1rem;">
+                Successfully saved pitch for <strong>{{ startup_name }}</strong> to database!
+            </article>
+        {% endif %}
+
         <hr>
 
-        {% if submitted %}
         <section>
-            <h2>Feedback for {{ startup_name }}</h2>
-            <ul>
-                {% for investor in investors %}
-                    <li>
-                        <strong>{{ investor.name }}:</strong> 
-                        {% if investor.invested %}
-                            <span style="color: green;">INVESTED</span>
-                        {% else %}
-                            <span style="color: red;">OUT</span>
-                        {% endif %}
-                        — "{{ investor.feedback }}"
-                    </li>
-                {% endfor %}
-            </ul>
+            <h2>Recent Submissions in Database</h2>
+            {% if pitches %}
+                <ul>
+                    {% for p in pitches %}
+                        <li>
+                            <strong>{{ pitch.startup_name }}</strong> ({{ pitch.category }}) — Asked for {{ formatted_amount }}
+                            <p><small>{{ p['pitch'] }}</small></p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No pitches saved yet.</p>
+            {% endif %}
         </section>
-        {% endif %}
     </main>
 </body>
 </html>

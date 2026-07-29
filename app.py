@@ -1,38 +1,82 @@
-import os
+import sqlite3
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
+DB_NAME = "pitches.db"
 
-# TODO: Add SQLite database initialization (init_db)
+
+def init_db():
+    #Create the database table if it doesn't exist yet.
+    schema = """
+    CREATE TABLE IF NOT EXISTS pitches (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        startup_name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        pitch TEXT NOT NULL,
+        ask_amount REAL NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        conn.execute(schema)
+
+
+init_db()
+
+
+def get_db_connection():
+    conn = sqlite3.connect(DB_NAME)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def get_formatted_pitches():
+    conn = get_db_connection()
+    rows = conn.execute("SELECT * FROM pitches ORDER BY id DESC").fetchall()
+    conn.close()
+
+    pitches = []
+    for row in rows:
+        pitches.append({
+            "startup_name": row["startup_name"],
+            "category": row["category"],
+            "pitch": row["pitch"],
+            "formatted_ask": f"${row['ask_amount']:,.2f}"
+        })
+    return pitches
+
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    pitches = get_formatted_pitches()
+    return render_template("index.html", pitches=pitches)
+
 
 @app.route("/submit-pitch", methods=["POST"])
 def submit_pitch():
-    # Grab form inputs
+
     startup_name = request.form.get("startup_name")
     category = request.form.get("category")
-    ask_amount = request.form.get("ask_amount")
     pitch = request.form.get("pitch")
+    ask_amount = float(request.form.get("ask_amount", 0))
 
-    # Temporary mock feedback until OpenAI integration
-    # TODO: Replace with real OpenAI API call
-    mock_investors = [
-        {"name": "Tech Titan", "invested": True, "feedback": "Solid tech concept."},
-        {"name": "Value Queen", "invested": False, "feedback": "Margins are too thin."},
-        {"name": "The Maverick", "invested": True, "feedback": "Sounds crazy enough to work."}
-    ]
-
-    # TODO: Save submission to SQLite database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO pitches (startup_name, category, pitch, ask_amount) VALUES (?, ?, ?, ?)",
+        (startup_name, category, pitch, ask_amount)
+    )
+    conn.commit()
+    conn.close()
+    pitches = get_formatted_pitches()
 
     return render_template(
-        "index.html", 
-        submitted=True, 
-        startup_name=startup_name, 
-        investors=mock_investors
+        "index.html",
+        pitches=pitches,
+        submitted=True,
+        startup_name=startup_name
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
