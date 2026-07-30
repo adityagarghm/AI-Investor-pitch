@@ -1,58 +1,78 @@
-<!DOCTYPE html>
-<head>
-    <title>AI Shark Tank - Draft</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-</head>
-<body>
-    <main class="container">
-        <h1>AI Shark Tank Simulator</h1>
-        <p><em>Work in Progress Draft</em></p>
-        <section>
-            <h2>Submit Your Pitch</h2>
+{% extends "base.html" %}
+{% block content %}
+<!--main page - where you submit the pitch-->
+<div class="grid" style="align-items: center; gap: 4rem;">
+    <div>
+        <hgroup style="margin-bottom: 2rem;">
+            <h1 style="font-size: 3.5rem; line-height: 1.1; background: -webkit-linear-gradient(#fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Face the AI Sharks. 
+            </h1>
+            <p style="font-size: 1.2rem; color: #94a3b8; margin-top: 1rem;">
+                Pitch your startup to three AI investors. Will you secure the funding, or get roasted?
+            </p>
+        </hgroup>
+        <!--side planel which holds the investors -->
+        <div style="background: rgba(15, 23, 42, 0.4); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #0ea5e9;">
+            <p style="margin-bottom: 0.5rem;"><strong>The Investor Panel:</strong></p>
+            <ul style="margin-bottom: 0; color: #cbd5e1;">
+                <li>🤖 <strong>Tech Titan:</strong> Scalability and code quality.</li>
+                <li>💸 <strong>Value Queen:</strong> Margins and realistic valuations.</li>
+                <li>🤪 <strong>The Maverick:</strong> Wild and disruptive gambles.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <article style="padding: 2.5rem;"> <!--container for the inputs-->
+            <h3 style="margin-bottom: 1.5rem; text-align: center;">Enter the Tank</h3>
             <form action="/submit-pitch" method="POST">
-                <label for="startup_name">Startup Name</label>
-                <input type="text" id="startup_name" name="startup_name" placeholder="e.g. RoboPet" required>
+                
+                <div class="grid">
+                    <div>
+                        <label for="startup_name" style="color: #cbd5e1;">Startup Name</label>
+                        <input type="text" id="startup_name" name="startup_name" placeholder="e.g. RoboPet" required>
+                    </div>
+                    <div> <!--category dropdown-->
+                        <label for="category" style="color: #cbd5e1;">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="Tech / AI">Tech / AI</option>
+                            <option value="Consumer Goods">Consumer Goods</option>
+                            <option value="Food & Beverage">Food & Beverage</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
 
-                <label for="category">Category</label>
-                <select id="category" name="category">
-                    <option value="Tech">Tech</option>
-                    <option value="Consumer Goods">Consumer Goods</option>
-                    <option value="Food">Food & Beverage</option>
-                </select>
+                <div class="grid"> 
+                    <div>
+                        <label for="ask_amount" style="color: #cbd5e1;">Ask ($)</label>
+                        <input type="number" id="ask_amount" name="ask_amount" placeholder="100000" required>
+                    </div>
+                    <div>
+                        <label for="ask_equity" style="color: #cbd5e1;">Equity (%)</label>
+                        <input type="number" id="ask_equity" name="ask_equity" placeholder="10" min="1" max="100" required>
+                    </div>
+                </div>
 
-                <label for="ask_amount">Investment Ask ($)</label>
-                <input type="number" id="ask_amount" name="ask_amount" placeholder="50000" required>
+                <label for="pitch" style="color: #cbd5e1;">Elevator Pitch</label>
+                <textarea id="pitch" name="pitch" rows="4" placeholder="Explain your product, the problem it solves, and how you make money..." required></textarea>
 
-                <label for="pitch">Pitch Summary</label>
-                <textarea id="pitch" name="pitch" placeholder="Describe your startup..." required></textarea>
-
-                <button type="submit">Submit Pitch</button>
+                <button type="submit" id="submit-btn" style="width: 100%; margin-top: 1rem; padding: 1rem;">
+                    <span id="btn-text">Pitch to the Sharks </span>
+                    <span id="loading-text" class="loading-text">The Sharks are deliberating... ⏳</span>
+                </button><!--loading text-->
             </form>
-        </section>
+        </article>
+    </div>
+</div>
 
-        {% if submitted %}
-            <article style="background-color: #d4edda; color: #155724; padding: 1rem;">
-                Successfully saved pitch for <strong>{{ startup_name }}</strong> to database!
-            </article>
-        {% endif %}
-
-        <hr>
-
-        <section>
-            <h2>Recent Submissions in Database</h2>
-            {% if pitches %}
-                <ul>
-                    {% for p in pitches %}
-                        <li>
-                            <strong>{{ pitch.startup_name }}</strong> ({{ pitch.category }}) — Asked for {{ formatted_amount }}
-                            <p><small>{{ p['pitch'] }}</small></p>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No pitches saved yet.</p>
-            {% endif %}
-        </section>
-    </main>
-</body>
-</html>
+<script>
+    document.querySelector('form').addEventListener('submit', function() {
+        const btn = document.getElementById('submit-btn');
+        document.getElementById('btn-text').style.display = 'none';
+        document.getElementById('loading-text').style.display = 'inline'; /*show loading text and hide submit text*/
+        btn.setAttribute('aria-busy', 'true'); /*adds the loading spinner */
+        btn.style.pointerEvents = 'none'; 
+    });
+</script>
+{% endblock %}

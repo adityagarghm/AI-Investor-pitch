@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+    <meta charset="UTF-8"> <!--read emojis-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--scale on any device-->
+    <title>{% block title %}AI Shark Tank{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">    
+</head>
+<body>
+    <header class="glass-nav">
+        <nav class="container">
+            <ul>
+                <li>
+                    <a href="{{ url_for('index') }}" style="color: white; text-decoration: none; font-size: 1.25rem;">
+                        <strong>AI Shark Tank</strong>
+                    </a>
+                </li>
+            </ul>
+            <ul> <!--nav bar links-->
+                <li><a href="{{ url_for('index') }}" class="secondary">Pitch Room</a></li>
+                <li><a href="{{ url_for('leaderboard') }}" class="secondary">Leaderboard</a></li>
+                <li><a href="{{ url_for('meet_the_sharks') }}" class="secondary">Meet the Sharks</a></li>
+                <li><a href="{{ url_for('all_pitches') }}" class="secondary">All Pitches</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="container" style="text-align: center; margin-top: 3rem;">
+        <p>&copy; AI Shark Tank. Built by Aditya Garg</p> <!--copywrite footer-->
+    </footer>
+
+</body>
+</html>

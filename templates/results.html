@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %} <!--this is the results page, acessible after clicking submit OR through the leaderboard/all pitches-->
+<h2>Results for {{ pitch['startup_name'] }}</h2>
+<p>
+    <strong>Category:</strong> {{ pitch['category'] }} | 
+    <strong>Asked:</strong> ${{ "{:,.2f}".format(pitch['ask_amount']) }} for {{ pitch['ask_equity'] }}% 
+</p>
+<!--:,.2f is formatting the number: , = add commas in number, .2 = 2 decimal places, f = float-->
+<p>
+    <em>Implied Valuation: <strong>${{ "{:,.2f}".format(pitch['valuation']) }}</strong></em>
+</p>
+
+<div class="grid">
+    {% for investor in investors %}
+    <article class="{% if investor.invested %}deal-made{% else %}shark-out{% endif %}">
+        <header>
+            <h4>{{ investor.name }}</h4>
+            <small>Rating: <strong>{{ investor.rating }}</strong></small> <!--rating by investor-->
+        </header>
+        <p>
+            {% if investor.invested %} <!--different text based on whether or not the investor invested-->
+                <span style="color: #2ecc71; font-weight: bold;">DEAL MADE (${{ "{:,.2f}".format(investor.offer) }})</span>
+            {% else %} 
+                <span style="color: #e74c3c; font-weight: bold;">OUT</span>
+            {% endif %}
+        </p>
+        <p><em>"{{ investor.feedback }}"</em></p> <!--investor feedback-->
+    </article>
+    {% endfor %}
+</div>
+
+<a href="/leaderboard" role="button" class="secondary">View Leaderboard</a>
+<a href="/" role="button" class="outline">Pitch Another Idea</a>
+{% endblock %}

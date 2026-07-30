@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<!--meet the sharks page, allows you to see how much they have invested-->
+<hgroup style="text-align: center; margin-bottom: 3rem;">
+    <h2>Meet the Investors</h2>
+    <p style="color: #94a3b8;">Live portfolio statistics based on all pitches in the database.</p>
+</hgroup>
+
+<div class="grid">
+    {% for name, data in stats.items() %}
+    <article style="{{ data.style }} text-align: center; padding: 2rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">{{ data.icon }}</div>
+        <h3 style="margin-bottom: 0.5rem;">{{ name }}</h3>     
+        <p style="color: #94a3b8; font-size: 0.9rem; min-height: 80px;">
+            {% if name == "Tech Titan" %} <!--describes each of the sharks-->
+                Looking for scalable software, AI, and exemplary code architecture.
+            {% elif name == "Value Queen" %}
+                Obsessed with proven demand, profit margins, and grounded valuations.
+            {% else %}
+                Wants wild ideas and high-risk gambles that could change the world.
+            {% endif %}
+        </p>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 1.5rem 0;">
+
+        <div class="grid" style="text-align: left; margin-bottom: 0;">
+            <!--displays stats (deals closed and total invested)-->
+            <div>
+                <small style="color: #94a3b8; display: block;">Deals Closed</small>
+                <strong style="font-size: 1.5rem;">{{ data.deals }}</strong>
+            </div>
+            <div>
+                <small style="color: #94a3b8; display: block;">Total Invested</small>
+                <strong style="font-size: 1.5rem; color: #2ecc71;">{{ data.formatted_spent }}</strong> 
+            </div>
+        </div>
+        
+    </article>
+    {% endfor %}
+</div>
+
+<div style="text-align: center; margin-top: 3rem;">
+    <a href="/" role="button" class="outline">Go Back to the Pitch Room</a>
+</div>
+
+{% endblock %}

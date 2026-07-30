@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}<!--leaderboard page, displays the top 10 pitches by amount raised-->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<hgroup class="mb-4">
+    <h2>Startup Leaderboard</h2>
+    <p class="text-muted">Track top-funded ideas, category trends, and AI investor ratings.</p>
+</hgroup>
+
+<div class="grid mb-4 align-center">
+    <div>
+        <article class="card-padding">
+            <h4 class="text-center mb-2">Funding Distribution</h4>
+            <div class="chart-wrapper">
+                <canvas id="fundingChart"></canvas> <!--pie chart by category-->
+            </div>
+        </article>
+    </div>
+    <div>
+        <article class="card-padding text-center">
+            <h3> Shark Verdict Breakdown</h3>
+            <p class="text-muted text-sm">
+                Explore how each investor scores pitches in real time. Higher total funding ranks pitches higher on the board.
+            </p>
+            <div class="mt-3">
+                <a href="{{ url_for('index') }}" role="button" class="btn-pitch">Submit a Pitch</a> <!--takes you to index.html (pitch) page-->
+            </div>
+        </article>
+    </div>
+</div>
+
+<article class="card-padding">
+    <h4 class="mb-2">Top Funded Pitches</h4>
+    <!--table-->
+    <div class="table-container">
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">Rank</th>
+                    <th>Startup</th>
+                    <th>Category</th>
+                    <th class="text-center">Tech</th>
+                    <th class="text-center">Value</th>
+                    <th class="text-center">Maverick</th>
+                    <th class="text-right"> Money Raised</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pitches %}  <!--pitches are given in app.py-->
+                <tr>
+                    <td><strong>#{{ loop.index }}</strong></td>
+                    <td>
+                        <a href="{{ url_for('results', pitch_id=p['id']) }}" class="startup-link"> <!--takes you to the pitch results page-->
+                            {{ p['startup_name'] }}
+                        </a>
+                    </td>
+                    <td><span class="text-muted">{{ p['category'] }}</span></td>
+                    <td class="text-center"><span class="rating-badge">{{ p['tech_rating'] }}</span></td>
+                    <td class="text-center"><span class="rating-badge">{{ p['value_rating'] }}</span></td>
+                    <td class="text-center"><span class="rating-badge">{{ p['maverick_rating'] }}</span></td>
+                    <td class="text-right text-success bold">
+                        ${{ "{:,.0f}".format(p['total_raised']) }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No deals made yet. Be the first.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</article>
+
+<script>
+    const labels = {{ chart_labels | safe }};
+    const dataValues = {{ chart_values | safe }};
+    const chartCanvas = document.getElementById('fundingChart');
+
+    if (labels && labels.length > 0) {
+        new Chart(chartCanvas.getContext('2d'), {
+            type: 'doughnut', /*pie chart*/
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Raised ($)',
+                    data: dataValues,
+                    backgroundColor: ['#38bdf8', '#4ade80', '#c084fc', '#fde047', '#fb923c', '#f87171'],/*color for each category*/
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {legend: {
+                        position: 'bottom',
+                        labels: { color: '#94a3b8', font: { size: 11 } } /*legend formatting*/
+                    }
+                }
+            }
+        });
+    } else {
+        chartCanvas.parentElement.innerHTML = "<p class='text-center text-muted'>No funding data yet.</p>";
+    }
+</script>
+
+{% endblock %}

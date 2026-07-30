@@ -1,0 +1,54 @@
+{% extends "base.html" %} <!--similar to leaderboard page, but shows all pitches and doesn't include charts-->
+{% block content %}
+
+<hgroup style="margin-bottom: 2rem;">
+    <h2>Pitch Directory</h2>
+    <p style="color: #94a3b8;">View all submitted pitches.</p>
+</hgroup>
+
+<article style="padding: 1.5rem;">
+    <div class="table-container">
+        <table role="grid"> <!--table for the pitches -->
+            <thead>
+                <tr>
+                    <th>Startup</th>
+                    <th>Category</th>
+                    <th>Ask ($)</th>
+                    <th>Equity (%)</th>
+                    <th>Valuation ($)</th>
+                    <th style="text-align: center;">🤖 Tech</th>
+                    <th style="text-align: center;">💸 Value</th>
+                    <th style="text-align: center;">🤪 Maverick</th>
+                    <th style="text-align: right;">Total Raised</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pitches %}
+                <tr>
+                    <td>
+                        <a href="/results/{{ p['id'] }}" style="text-decoration: none; font-weight: bold; color: #38bdf8;">
+                            {{ p['startup_name'] }} → <!--links to the pitch page (results)-->
+                        </a>
+                    </td>
+                    <td><span style="color: #94a3b8;">{{ p['category'] }}</span></td>
+                    <td>${{ "{:,.0f}".format(p['ask_amount']) }}</td> <!--formatting so that no decimal places are displayed-->
+                    <td>{{ p['ask_equity'] }}%</td> 
+                    <td>${{ "{:,.0f}".format(p['valuation']) }}</td>
+                    <td style="text-align: center;"><span class="rating-badge">{{ p['tech_rating'] }}</span></td>
+                    <td style="text-align: center;"><span class="rating-badge">{{ p['value_rating'] }}</span></td>
+                    <td style="text-align: center;"><span class="rating-badge">{{ p['maverick_rating'] }}</span></td>
+                    <td style="text-align: right; color: #2ecc71; font-weight: bold;">
+                        ${{ "{:,.0f}".format(p['total_raised']) }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9" style="text-align: center; color: #94a3b8;">No pitches submitted yet!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</article>
+
+{% endblock %}
