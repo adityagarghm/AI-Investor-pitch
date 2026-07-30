@@ -75,8 +75,8 @@
 </article>
 
 <script>
-    const labels = {{ chart_labels | safe }};
-    const dataValues = {{ chart_values | safe }};
+    const labels = JSON.parse('{{ chart_labels | safe }}');
+    const dataValues = JSON.parse('{{ chart_values | safe }}');
     const chartCanvas = document.getElementById('fundingChart');
 
     if (labels && labels.length > 0) {

@@ -8,7 +8,7 @@
 
 <div class="grid">
     {% for name, data in stats.items() %}
-    <article style="{{ data.style }} text-align: center; padding: 2rem;">
+    <article class="text-center card-padding" style="{{ data.style }}">
         <div style="font-size: 4rem; margin-bottom: 1rem;">{{ data.icon }}</div>
         <h3 style="margin-bottom: 0.5rem;">{{ name }}</h3>     
         <p style="color: #94a3b8; font-size: 0.9rem; min-height: 80px;">
