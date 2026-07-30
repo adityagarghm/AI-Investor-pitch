@@ -29,7 +29,35 @@
     {% endfor %}
     
 </div>
+<div style="text-align: center; margin: 2rem 0;">
+    <button id="share-btn" style="background-color: #38bdf8; color: #0f172a; border: none; font-weight: bold; cursor: pointer;">
+        🔗 Copy Shareable Result
+    </button>
+</div>
 
+<script>
+    // Share Button Logic
+    document.getElementById('share-btn').addEventListener('click', function() {
+        const startupName = "{{ pitch['startup_name'] }}";
+        const totalRaised = "{{ '{:,.0f}'.format(pitch['total_raised']) }}";
+        
+        const shareText = "🦈 I just pitched my startup \"" + startupName + "\" on AI Shark Tank!\n\n💸 I raised $" + totalRaised + "!\n\nCan you beat my AI Shark ratings? Try it out!";
+        
+        navigator.clipboard.writeText(shareText).then(() => {
+            const btn = document.getElementById('share-btn');
+            btn.textContent = "Copied to clipboard!";
+            btn.style.backgroundColor = "#2ecc71";
+            btn.style.color = "#ffffff";
+            
+            // Reset back to original style after 3 seconds
+            setTimeout(() => {
+                btn.textContent = "🔗 Copy Shareable Result";
+                btn.style.backgroundColor = "#38bdf8";
+                btn.style.color = "#0f172a";
+            }, 3000);
+        });
+    });
+</script>
 <a href="/leaderboard" role="button" class="secondary">View Leaderboard</a>
 <a href="/" role="button" class="outline">Pitch Another Idea</a>
 
