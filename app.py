@@ -260,4 +260,4 @@ def all_pitches():
     return render_template("all_pitches.html", pitches=pitches)
 
 if __name__ == "__main__":
-    app.run(port = 3001,debug=True)
+    app.run(port = 3002,debug=True)

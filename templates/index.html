@@ -55,9 +55,29 @@
                 </div>
 
                 <label for="pitch" style="color: #cbd5e1;">Elevator Pitch</label>
-                <textarea id="pitch" name="pitch" rows="4" placeholder="Explain your product, the problem it solves, and how you make money..." required></textarea>
+                <label for="pitch" style="color: #cbd5e1;">Elevator Pitch</label>
+                <textarea id="pitch" name="pitch" rows="4" maxlength="500" placeholder="Explain your product, the problem it solves, and how you make money..." required></textarea>
+                <div class="text-right mb-4">
+                    <small id="char-counter" class="text-muted">0 / 500 characters</small> <!--500 character limit-->
+                </div>
+                <script>
+                    // Grab the original 'pitch' ID
+                    const textarea = document.getElementById('pitch');
+                    const counter = document.getElementById('char-counter');
 
-                <button type="submit" id="submit-btn" style="width: 100%; margin-top: 1rem; padding: 1rem;">
+                    textarea.addEventListener('input', function() {
+                        const currentLength = this.value.length;
+                        counter.textContent = `${currentLength} / 500 characters`;
+                        
+                        // Turn text red if they are getting close to the limit!
+                        if (currentLength >= 450) {
+                            counter.style.color = '#f87171'; // Red
+                        } else {
+                            counter.style.color = '#94a3b8'; // Default muted gray
+                        }
+                    });
+                </script>
+                                <button type="submit" id="submit-btn" style="width: 100%; margin-top: 1rem; padding: 1rem;">
                     <span id="btn-text">Pitch to the Sharks </span>
                     <span id="loading-text" class="loading-text">The Sharks are deliberating... ⏳</span>
                 </button><!--loading text-->

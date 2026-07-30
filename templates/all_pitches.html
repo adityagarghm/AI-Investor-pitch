@@ -7,6 +7,27 @@
 </hgroup>
 
 <article style="padding: 1.5rem;">
+    <div class="mb-4">
+        <input type="search" id="pitch-search" placeholder=" Search startups or categories..." style="max-width: 400px; width: 100%;">
+    </div>
+
+    <script>
+        document.getElementById('pitch-search').addEventListener('keyup', function() {
+            const searchQuery = this.value.toLowerCase();
+            // Grab all rows inside the table body
+            const rows = document.querySelectorAll('#pitch-table-body tr');
+
+            rows.forEach(row => {
+                // Get all text inside the row
+                const rowText = row.textContent.toLowerCase();
+                if (rowText.includes(searchQuery)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
     <div class="table-container">
         <table role="grid"> <!--table for the pitches -->
             <thead>
