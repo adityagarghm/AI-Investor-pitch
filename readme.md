@@ -6,9 +6,12 @@
 ---
 ## Configure Virtual Local Environment
 
+**Published on the web: https://ai-investor-pitch-production.up.railway.app/**
+
+To run locally: 
 1. **Clone the Repository:** Download or clone your project repository to your computer using Git and enter the project folder.
 
-2. Create & Activate a Virtual Environment: Open your terminal in that folder, create a Python virtual environment, and activate it. **Mac:** python3 -m venv venv, source venv/bin/activate 
+2. **Create & Activate a Virtual Environment:** Open your terminal in that folder, create a Python virtual environment, and activate it. **Mac:** python3 -m venv venv, source venv/bin/activate 
 **Windows:** python -m venv venv, venv\Scripts\activate
 
 3. **Install Requirements:** pip install -r requirements.txt to install all the dependencies
