@@ -245,6 +245,7 @@ def all_pitches():
         p_dict = dict(pitch)
         try: #same thing as leaderboard except showing more than just top 10 
             investors = json.loads(p_dict["investor_responses"])
+            ratings = {}
             for inv in investors:
                 name = inv.get("name")
                 rating = inv.get("rating", "N/A")
