@@ -261,5 +261,5 @@ def all_pitches():
     return render_template("all_pitches.html", pitches=pitches)
 
 if __name__ == "__main__":
-    port = int(os.getenv('PORT', 5000))
+    port = int(os.getenv('PORT', 300))
     app.run(host='0.0.0.0', port=port, debug=True)
